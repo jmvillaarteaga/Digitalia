@@ -8,6 +8,8 @@ using EncuestadoraDigitalia.Core.Infrastructure;
 using EncuestadoraDigitalia.Core.Models.Account;
 using EncuestadoraDigitalia.Core.Services;
 using EncuestadoraDigitalia.Core.Services.Account;
+using EncuestadoraDigitalia.Core.Services.Encuestadora;
+using EncuestadoraDigitalia.Core.Services.Encuestadora.Interfaces;
 using EncuestadoraDigitalia.Core.Services.Shop;
 using EncuestadoraDigitalia.Server.Authorization;
 using EncuestadoraDigitalia.Server.Authorization.Requirements;
@@ -195,6 +197,7 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IEncuestaService, EncuestaService>();
 
 // Other Services
 builder.Services.AddScoped<IEmailSender, EmailSender>();

@@ -6,6 +6,7 @@
 
 using EncuestadoraDigitalia.Core.Models;
 using EncuestadoraDigitalia.Core.Models.Account;
+using EncuestadoraDigitalia.Core.Models.Encuestadora;
 using EncuestadoraDigitalia.Core.Models.Shop;
 using EncuestadoraDigitalia.Core.Services.Account;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace EncuestadoraDigitalia.Core.Infrastructure
             await dbContext.Database.MigrateAsync();
             await SeedDefaultUsersAsync();
             await SeedDemoDataAsync();
+            await SeedDemoDataEncuestaAsync();
         }
 
         /************ DEFAULT USERS **************/
@@ -226,6 +228,51 @@ namespace EncuestadoraDigitalia.Core.Infrastructure
                 await dbContext.SaveChangesAsync();
 
                 logger.LogInformation("Seeding demo data completed");
+            }
+        }
+
+        private async Task SeedDemoDataEncuestaAsync()
+        {
+            if (!await dbContext.Encuestas.AnyAsync() && !await dbContext.Preguntas.AnyAsync() && !await dbContext.Alternativas.AnyAsync())
+            {
+                logger.LogInformation("Seeding demo data Encuesta");
+
+                var encuesta = new Encuesta
+                {
+                    Descripcion = "Encuesta de Satisfacción",
+                };            
+                
+                encuesta.Preguntas.Add(new()
+                {
+                    Descripcion = "¿Cómo calificaría la calidad de nuestros productos?",
+                    Alternativas = new List<Alternativa>
+                    {
+                        new() { Descripcion = "Excelente" },
+                        new() { Descripcion = "Muy Buena" },
+                        new() { Descripcion = "Buena" },
+                        new() { Descripcion = "Regular" },
+                        new() { Descripcion = "Mala" }
+                    }
+                });
+
+                encuesta.Preguntas.Add(new()
+                {
+                    Descripcion = "¿Cómo calificaría el tiempo de entrega de nuestros productos?",
+                    Alternativas = new List<Alternativa>
+                    {
+                        new() { Descripcion = "Excelente" },
+                        new() { Descripcion = "Muy Buena" },
+                        new() { Descripcion = "Buena" },
+                        new() { Descripcion = "Regular" },
+                        new() { Descripcion = "Mala" }
+                    }
+                });
+
+                dbContext.Encuestas.Add(encuesta);                
+
+                await dbContext.SaveChangesAsync();
+
+                logger.LogInformation("Seeding demo data encuesta completed");
             }
         }
     }

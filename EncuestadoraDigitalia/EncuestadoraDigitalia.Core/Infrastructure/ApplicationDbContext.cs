@@ -6,6 +6,7 @@
 
 using EncuestadoraDigitalia.Core.Models;
 using EncuestadoraDigitalia.Core.Models.Account;
+using EncuestadoraDigitalia.Core.Models.Encuestadora;
 using EncuestadoraDigitalia.Core.Models.Shop;
 using EncuestadoraDigitalia.Core.Services.Account;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,6 +26,12 @@ namespace EncuestadoraDigitalia.Core.Infrastructure
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        public DbSet<Encuesta> Encuestas { get; set; }
+
+        public DbSet<Pregunta> Preguntas { get; set; }
+
+        public DbSet<Alternativa> Alternativas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -58,6 +65,17 @@ namespace EncuestadoraDigitalia.Core.Infrastructure
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Encuesta>()
+                .HasMany(r => r.Preguntas)
+                .WithOne()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Pregunta>()
+                .HasMany(r => r.Alternativas)
+                .WithOne()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<Customer>().Property(c => c.Name).IsRequired().HasMaxLength(100);
             builder.Entity<Customer>().HasIndex(c => c.Name);
             builder.Entity<Customer>().Property(c => c.Email).HasMaxLength(100);
@@ -85,7 +103,15 @@ namespace EncuestadoraDigitalia.Core.Infrastructure
             builder.Entity<OrderDetail>().Property(p => p.UnitPrice).HasColumnType(priceDecimalType);
             builder.Entity<OrderDetail>().Property(p => p.Discount).HasColumnType(priceDecimalType);
             builder.Entity<OrderDetail>().ToTable($"{tablePrefix}{nameof(OrderDetails)}");
-        }
+
+            builder.Entity<Encuesta>().Property(o => o.Descripcion).IsRequired().HasMaxLength(500);
+            builder.Entity<Encuesta>().ToTable($"{tablePrefix}{nameof(Encuesta)}");
+
+            builder.Entity<Pregunta>().Property(o => o.Descripcion).IsRequired().HasMaxLength(500);
+            builder.Entity<Pregunta>().ToTable($"{tablePrefix}{nameof(Pregunta)}");
+
+            builder.Entity<Alternativa>().Property(o => o.Descripcion).IsRequired().HasMaxLength(500);
+            builder.Entity<Alternativa>().ToTable($"{tablePrefix}{nameof(Alternativa)}");        }
 
         public override int SaveChanges()
         {

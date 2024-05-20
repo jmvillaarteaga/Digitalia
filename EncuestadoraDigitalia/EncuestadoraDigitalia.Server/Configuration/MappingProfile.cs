@@ -6,9 +6,11 @@
 
 using AutoMapper;
 using EncuestadoraDigitalia.Core.Models.Account;
+using EncuestadoraDigitalia.Core.Models.Encuestadora;
 using EncuestadoraDigitalia.Core.Models.Shop;
 using EncuestadoraDigitalia.Core.Services.Account;
 using EncuestadoraDigitalia.Server.ViewModels.Account;
+using EncuestadoraDigitalia.Server.ViewModels.Encuestadora;
 using EncuestadoraDigitalia.Server.ViewModels.Shop;
 using Microsoft.AspNetCore.Identity;
 
@@ -58,6 +60,15 @@ namespace EncuestadoraDigitalia.Server.Configuration
                 .ReverseMap();
 
             CreateMap<Order, OrderVM>()
+                .ReverseMap();
+
+            CreateMap<Encuesta, EncuestaVM>()
+                .ReverseMap();
+
+            CreateMap<Pregunta, PreguntaVM>()
+                .ReverseMap();
+
+            CreateMap<Alternativa, AlternativaVM>()
                 .ReverseMap();
         }
     }
