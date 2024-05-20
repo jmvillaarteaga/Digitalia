@@ -49,11 +49,28 @@ namespace EncuestadoraDigitalia.Core.Services.Account
             RolesPermissionGroupName,
             "Permission to assign roles to users");
 
+        /************* ENCUESTA PERMISSIONS *************/
+
+        public const string EncuestasPermissionGroupName = "Encuestas Permissions";
+
+        public static readonly ApplicationPermission ViewEncuestas = new(
+            "View Encuestas",
+            "encuestas.view",
+            EncuestasPermissionGroupName,
+            "Permission to view encuestas");
+
+        public static readonly ApplicationPermission ManageEncuestas = new(
+            "Manage Encuestas",
+            "encuestas.manage",
+            EncuestasPermissionGroupName,
+            "Permission to create, delete and modify encuestas");
+
         /************* ALL PERMISSIONS *************/
 
         public static readonly ReadOnlyCollection<ApplicationPermission> AllPermissions =
             new List<ApplicationPermission> {
                 ViewUsers, ManageUsers,
+                ViewEncuestas, ManageEncuestas,
                 ViewRoles, ManageRoles, AssignRoles
             }.AsReadOnly();
 
@@ -76,7 +93,7 @@ namespace EncuestadoraDigitalia.Core.Services.Account
 
         public static string[] GetAdministrativePermissionValues()
         {
-            return [ManageUsers, ManageRoles, AssignRoles];
+            return [ManageUsers, ManageRoles, AssignRoles, ManageEncuestas];
         }
     }
 }

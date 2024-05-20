@@ -19,10 +19,10 @@
           <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link" routerLink=""><i class="fa fa-home"></i></a>
           </li>
-          <li class="nav-item" routerLinkActive="active" *ngIf="canViewCustomers">
-            <a class="nav-link" routerLink="/customers">{{'mainMenu.Customers' | translate}}</a>
+          <li class="nav-item" routerLinkActive="active" *ngIf="canViewEncuestas">
+            <a class="nav-link" routerLink="/encuestas">Encuestas</a>
           </li>
-          <li class="nav-item" routerLinkActive="active" *ngIf="canViewProducts">
+          <!--<li class="nav-item" routerLinkActive="active" *ngIf="canViewProducts">
             <a class="nav-link" routerLink="/products">{{'mainMenu.Products' | translate}}</a>
           </li>
           <li class="nav-item" routerLinkActive="active" *ngIf="canViewOrders">
@@ -30,7 +30,7 @@
           </li>
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" routerLink="/about">{{'mainMenu.About' | translate}}</a>
-          </li>
+          </li>-->
           <li class="nav-item ms-lg-auto me-lg-2" routerLinkActive="active">
             <a class="nav-link" routerLink="/settings"><i class="fa fa-cog"></i></a>
           </li>
@@ -76,8 +76,8 @@
         Loaded!
       </h1>
       <p>
-        QUICK APPLICATION SYSTEM - <span style="font-style:italic">quick</span>App &copy;
-        <a class="text-link" href="https://www.ebenmonney.com">WWW.EBENMONNEY.COM</a>
+        ENCUESTADORA DIGITALIA APPLICATION SYSTEM - <span style="font-style:italic">Digitalia </span>App &copy;
+        <a class="text-link" href="https://www.digitalia.com">WWW.DIGITALIA.COM</a>
       </p>
 
     </div>
@@ -91,10 +91,10 @@
   <footer class="footer fixed-bottom">
     <div class="container">
       <p class="text-center text-muted">
-        <span style="font-style:italic">quick</span>App &copy; {{getYear()}}
-        <a class="text-link" href="https://www.ebenmonney.com" target="_blank">www.ebenmonney.com</a>
-        <!--<span class="small display-none">- Powered by <a href="https://www.ebenmonney.com/quickapp"
-          target="_blank"><span style="font-style:italic">quick</span>App</a></span>-->
+        <span style="font-style:italic">Digitalia </span>App &copy; {{getYear()}}
+        <a class="text-link" href="https://www.digitalia.com" target="_blank">www.digitalia.com</a>
+        <!--<span class="small display-none">- Powered by <a href="https://www.digitalia.com"
+    target="_blank"><span style="font-style:italic">quick</span>App</a></span>-->
       </p>
     </div>
   </footer>
