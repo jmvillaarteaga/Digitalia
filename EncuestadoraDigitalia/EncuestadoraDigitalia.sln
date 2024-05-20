@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncuestadoraDigitalia.Server", "EncuestadoraDigitalia.Server\EncuestadoraDigitalia.Server.csproj", "{6D176883-4CF0-4550-8EC6-44D543B8F414}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncuestadoraDigitalia.Core", "EncuestadoraDigitalia.Core\EncuestadoraDigitalia.Core.csproj", "{F4AEA231-38AD-4DB5-A727-6F8A009FCE04}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "EncuestadoraDigitalia.client", "EncuestadoraDigitalia.client\EncuestadoraDigitalia.client.esproj", "{398837A3-42DF-4773-801E-AB14AD997E1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D176883-4CF0-4550-8EC6-44D543B8F414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D176883-4CF0-4550-8EC6-44D543B8F414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D176883-4CF0-4550-8EC6-44D543B8F414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D176883-4CF0-4550-8EC6-44D543B8F414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4AEA231-38AD-4DB5-A727-6F8A009FCE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4AEA231-38AD-4DB5-A727-6F8A009FCE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4AEA231-38AD-4DB5-A727-6F8A009FCE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4AEA231-38AD-4DB5-A727-6F8A009FCE04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398837A3-42DF-4773-801E-AB14AD997E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{398837A3-42DF-4773-801E-AB14AD997E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{398837A3-42DF-4773-801E-AB14AD997E1E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{398837A3-42DF-4773-801E-AB14AD997E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{398837A3-42DF-4773-801E-AB14AD997E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398837A3-42DF-4773-801E-AB14AD997E1E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C763C2D-AD45-4633-9D46-ABE1DF48B0C1}
+	EndGlobalSection
+EndGlobal
