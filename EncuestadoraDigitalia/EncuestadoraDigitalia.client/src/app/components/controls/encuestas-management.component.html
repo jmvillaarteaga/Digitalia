@@ -1,0 +1,52 @@
+<div>
+  <div class="row control-box">
+    <div class="col-lg-8">
+      <div class="search-box">
+        <app-search-box (searchChange)="onSearchChanged($event)" placeholder="Buscar Encuesta">></app-search-box>
+      </div>
+    </div>
+    <div class="col-lg-4 pe-lg-5">
+      <ul class="nav flex-column flex-lg-row justify-content-end">
+        <li *ngIf="canManageEncuestas" class="nav-item toolbaritem">
+          <a class="nav-link" href="javascript:;" (click)="nuevaEncuesta()">
+            <i class="fa fa-plus-circle"></i> Nueva Encuesta
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <ngx-datatable class="material colored-header sm table-x table-striped table-hover"
+                 [loadingIndicator]="loadingIndicator"
+                 [rows]="rows"
+                 [rowHeight]="35"
+                 [headerHeight]="37"
+                 [footerHeight]="35"
+                 [columns]="columns"
+                 [scrollbarV]="true"
+                 [columnMode]="'force'">
+  </ngx-datatable>
+
+  <ng-template #indexTemplate let-value="value">
+    <strong>{{value}}</strong>
+  </ng-template>
+
+
+  <ng-template #actionsTemplate let-row="row" let-value="value" let-i="index">
+    <a *ngIf="canManageEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="editaEncuesta(row)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'roles.management.Edit' | translate}}</a>
+    <a *ngIf="!canManageEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="editaEncuesta(row)"><i class="fa fa-eye" aria-hidden="true"></i> {{'roles.management.Details' | translate}}</a>
+    {{canManageEncuestas ? '|' : ''}}
+    <a *ngIf="canManageEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="eliminarEncuesta(row)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{'roles.management.Delete' | translate}}</a>
+  </ng-template>
+
+  <ng-template #editorModal let-modal>
+    <div class="modal-header">
+      <h4 *ngIf="!canManageEncuestas" class="modal-title"><i class="fa fa-shield"></i> {{'roles.management.RoleDetails' | translate:editingEncuestaDescripcion}}</h4>
+      <h4 *ngIf="canManageEncuestas" class="modal-title"><i class="fa fa-shield"></i> {{editingEncuestaDescripcion ? ('roles.management.EditRole' | translate:editingEncuestaDescripcion) : ('roles.management.NewRole' | translate)}}</h4>
+      <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
+    </div>
+    <div class="modal-body">
+      <!--<app-role-editor #roleEditor (afterOnInit)="setRoleEditorComponent($event)"></app-role-editor>-->
+    </div>
+  </ng-template>
+</div>

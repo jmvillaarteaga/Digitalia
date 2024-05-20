@@ -22,6 +22,12 @@ namespace EncuestadoraDigitalia.Core.Services.Encuestadora
             _context = context;
         }
 
+        public async Task<Encuesta?> GetEncuestaByIdAsync(int Id)
+        {
+            return await _context.Encuestas
+                .FindAsync(new object[] { Id });
+        }
+
         public async Task<List<Encuesta>> GetEncuestasAsync(int page, int pageSize)
         {
             IQueryable<Encuesta> encuestasQuery = _context.Encuestas
@@ -39,6 +45,19 @@ namespace EncuestadoraDigitalia.Core.Services.Encuestadora
             var encuestas = await encuestasQuery.ToListAsync();
 
             return encuestas;
+        }
+
+        public async Task<(bool Succeeded, string[] Errors)> DeleteEncuestaAsync(Encuesta encuesta)
+        {
+            var entity = await _context.Encuestas
+                .FindAsync(new object[] { encuesta.Id });
+
+            //Guard.Against.NotFound(request.Id, entity);
+            if (entity != null)
+                _context.Encuestas.Remove(entity);
+
+            await _context.SaveChangesAsync();
+            return (true, []);
         }
 
     }   

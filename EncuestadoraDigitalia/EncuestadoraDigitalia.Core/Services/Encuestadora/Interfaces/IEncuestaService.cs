@@ -12,11 +12,11 @@ namespace EncuestadoraDigitalia.Core.Services.Encuestadora.Interfaces
     {
         //Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
         //Task<(bool Succeeded, string[] Errors)> CreateUserAsync(ApplicationUser user, IEnumerable<string> roles, string password);
-        //Task<(bool Succeeded, string[] Errors)> DeleteUserAsync(ApplicationUser user);
-        //Task<(bool Succeeded, string[] Errors)> DeleteUserAsync(string userId);
+        Task<(bool Succeeded, string[] Errors)> DeleteEncuestaAsync(Encuesta encuesta);
+        //Task<(bool Succeeded, string[] Errors)> DeleteEncuestaAsync(int encuestaId);
         //Task<(ApplicationUser User, string[] Roles)?> GetUserAndRolesAsync(string userId);
         //Task<ApplicationUser?> GetUserByEmailAsync(string email);
-        //Task<ApplicationUser?> GetUserByIdAsync(string userId);
+        Task<Encuesta?> GetEncuestaByIdAsync(int encuestaId);
         //Task<ApplicationUser?> GetUserByUserNameAsync(string userName);
         //Task<IList<string>> GetUserRolesAsync(ApplicationUser user);
         Task<List<Encuesta>> GetEncuestasAsync(int page, int pageSize);

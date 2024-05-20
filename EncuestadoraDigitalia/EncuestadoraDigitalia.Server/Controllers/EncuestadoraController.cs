@@ -30,10 +30,18 @@ namespace EncuestadoraDigitalia.Server.Controllers
             _encuestaService = encuestaService;
             _authorizationService = authorizationService;
         }
-        
+
+        [HttpGet("encuestas")]
+        [Authorize(AuthPolicies.ViewAllRolesPolicy)]
+        [ProducesResponseType(200, Type = typeof(List<EncuestaVM>))]
+        public async Task<IActionResult> GetEncuestas()
+        {
+            return await GetEncuestas(-1, -1);
+        }
+
         [HttpGet("encuestas/{pageNumber:int}/{pageSize:int}")]
         [Authorize(AuthPolicies.ViewAllUsersPolicy)]
-        [ProducesResponseType(200, Type = typeof(List<UserVM>))]
+        [ProducesResponseType(200, Type = typeof(List<EncuestaVM>))]
         public async Task<IActionResult> GetEncuestas(int pageNumber, int pageSize)
         {
             var encuestas = await _encuestaService.GetEncuestasAsync(pageNumber, pageSize);
@@ -41,5 +49,40 @@ namespace EncuestadoraDigitalia.Server.Controllers
             return Ok(_mapper.Map<List<EncuestaVM>>(encuestas));
         }
 
+        [HttpDelete("encuestas/{id}")]
+        [Authorize(AuthPolicies.ManageAllRolesPolicy)]
+        [ProducesResponseType(200, Type = typeof(EncuestaVM))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeletEncuesta(int id)
+        {
+            var encuesta = await _encuestaService.GetEncuestaByIdAsync(id);
+
+            if (encuesta == null)
+                return NotFound(id);
+
+            //var canDelete = await _administrativoService.TestCanDeleteRoleAsync(id);
+            //if (!canDelete.Success)
+            //{
+            //    AddModelError($"Role \"{administrativo.Name}\" cannot be deleted at this time. " +
+            //        "Delete the associated records and try again");
+            //    AddModelError(canDelete.Errors, "Records");
+            //}
+
+            if (ModelState.IsValid)
+            {
+                var result = await _encuestaService.DeleteEncuestaAsync(encuesta);
+
+                if (!result.Succeeded)
+                {
+                    throw new UserRoleException($"The following errors occurred whilst deleting encuesta \"{id}\": " +
+                    $"{string.Join(", ", result.Errors)}");
+                }
+
+                return Ok(_mapper.Map<EncuestaVM>(encuesta));
+            }
+
+            return BadRequest(ModelState);
+        }
     }
 }

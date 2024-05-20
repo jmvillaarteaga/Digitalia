@@ -10,6 +10,7 @@ import { RouterModule, Routes, DefaultUrlSerializer, UrlSerializer, UrlTree, Tit
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { CustomersComponent } from './components/customers/customers.component';
+import { EncuestadoraComponent } from './components/encuestadora/encuestadora.component';
 import { ProductsComponent } from './components/products/products.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -45,6 +46,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], title: 'Home' },
   { path: 'login', component: LoginComponent, title: 'Login' },
   { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard], title: 'Customers' },
+  { path: 'encuestas', component: EncuestadoraComponent, canActivate: [AuthGuard], title: 'Encuestas' },
   { path: 'products', component: ProductsComponent, canActivate: [AuthGuard], title: 'Products' },
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard], title: 'Orders' },
   { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], title: 'Settings' },
