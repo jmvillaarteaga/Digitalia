@@ -14,7 +14,7 @@ import { AppTranslationService } from '../../services/app-translation.service';
 import { Utilities } from '../../services/utilities';
 //import { Role } from '../../models/role.model';
 import { Permissions } from '../../models/permission.model';
-//import { RoleEditorComponent } from './role-editor.component';
+import { EncuestaEditorComponent } from './encuesta-editor.component';
 import { Encuesta } from '../../models/encuesta.model';
 import { Pregunta } from '../../models/pregunta.model';
 import { EncuestadoraService } from '../../services/encuestadora.service';
@@ -39,7 +39,10 @@ export class EncuestasManagementComponent implements OnInit {
   sourceEncuesta: Encuesta | null = null;
   editingEncuestaDescripcion: { descripcion: string } | null = null;
   loadingIndicator = false;
+  nuevoEnc = false;
+  encuestaDescripcion = '';
 
+  //newEncuesta: Encuesta = new Encuesta();
 
   @ViewChild('indexTemplate', { static: true })
   indexTemplate!: TemplateRef<unknown>;
@@ -47,8 +50,8 @@ export class EncuestasManagementComponent implements OnInit {
   @ViewChild('actionsTemplate', { static: true })
   actionsTemplate!: TemplateRef<unknown>;
 
-  @ViewChild('editorModal', { static: true })
-  editorModalTemplate!: TemplateRef<unknown>;
+  //@ViewChild('editorModal', { static: true })
+  //editorModalTemplate!: TemplateRef<unknown>;
 
   //encuestaEditor: RoleEditorComponent | null = null;
 
@@ -150,10 +153,16 @@ export class EncuestasManagementComponent implements OnInit {
   }
 
   nuevaEncuesta() {
+    this.nuevoEnc = true;
     this.editingEncuestaDescripcion = null;
     this.sourceEncuesta = null;
+    this.editedEncuesta = new Encuesta();
 
     //this.openRoleEditor();
+  }
+
+  cancelarNuevaEncuesta(message: string) {
+    this.nuevoEnc = false;
   }
 
   editaEncuesta(row: Encuesta) {

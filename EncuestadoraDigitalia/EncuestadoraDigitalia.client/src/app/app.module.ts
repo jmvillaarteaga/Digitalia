@@ -61,6 +61,7 @@ import { RoleEditorComponent } from './components/controls/role-editor.component
 import { EncuestasManagementComponent } from './components/controls/encuestas-management.component';
 import { EncuestadoraEndpoint } from './services/encuestadora-endpoint.service';
 import { EncuestadoraService } from './services/encuestadora.service';
+import { EncuestaEditorComponent } from './components/controls/encuesta-editor.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { EncuestadoraService } from './services/encuestadora.service';
     UsersManagementComponent, UserInfoComponent, UserPreferencesComponent,
     RolesManagementComponent, RoleEditorComponent,
     EncuestasManagementComponent,
+    EncuestaEditorComponent,
     AboutComponent,
     NotFoundComponent,
     NotificationsViewerComponent,
