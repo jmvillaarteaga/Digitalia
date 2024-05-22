@@ -44,9 +44,17 @@ export class EncuestaEditorModalComponent implements OnInit {
 
   newPregunta: Pregunta = new Pregunta();
   newAlternativa: Alternativa = new Alternativa();
-  @Output() cancelarPreguntaEvent = new EventEmitter<string>();
+
+  public changesSavedCallback: { (): void } | undefined;
+  public changesFailedCallback: { (): void } | undefined;
+  public changesCancelledCallback: { (): void } | undefined;
+
+  /*@Output() cancelarPreguntaEvent = new EventEmitter<string>();*/
 
   @Output() grabarPreguntaEvent = new EventEmitter<Pregunta>();
+
+  @Output()
+  afterOnInit = new EventEmitter<EncuestaEditorModalComponent>();
 
   @ViewChild('indexTemplateAlternativa', { static: true })
   indexTemplateAlternativa!: TemplateRef<unknown>;
@@ -60,13 +68,14 @@ export class EncuestaEditorModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    
     //const gT = (key: string) => this.translationService.getTranslation(key);
     this.columnsAlternativas = [
       { prop: 'index', name: '#', width: 50, cellTemplate: this.indexTemplateAlternativa, canAutoResize: false },
       { prop: 'descripcion', name: 'Alternativa', width: 320 },
       { name: 'Acción', width: 160, cellTemplate: this.actionsTemplateAlternativa, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
     ];
-
+    this.afterOnInit.emit(this);
    // this.loadData();
   }
 
@@ -171,12 +180,18 @@ export class EncuestaEditorModalComponent implements OnInit {
     //this.openRoleEditor();
   }
   cancelarPregunta() {
-    this.cancelarPreguntaEvent.emit('Cancelar...');
+    /*this.cancelarPreguntaEvent.emit('Cancelar...');*/
+    if (this.changesCancelledCallback) {
+      this.changesCancelledCallback();
+    }
   }
 
   grabarPregunta() {
     this.newPregunta.alternativas = this.rowsAlternativas;
     this.grabarPreguntaEvent.emit(this.newPregunta);
+    if (this.changesSavedCallback) {
+      this.changesSavedCallback();
+    }
   }
   //editaPregunta(row: Alternativa) {
     //this.editingEncuestaDescripcion = { descripcion: row.descripcion };
@@ -224,14 +239,13 @@ export class EncuestaEditorModalComponent implements OnInit {
 
   eliminarAlternativaHelper(row: Alternativa) {
     this.alertService.startLoadingMessage(`Eliminando... "${row.descripcion}"`);
-    this.loadingIndicatorAlternativa = true;
-
-    this.alertService.stopLoadingMessage();
-    this.loadingIndicatorAlternativa = false;
+    this.loadingIndicatorAlternativa = true;   
 
     this.rowsCacheAlternativas = this.rowsCacheAlternativas.filter(item => item !== row);
     this.rowsAlternativas = this.rowsAlternativas.filter(item => item !== row);
 
+    this.alertService.stopLoadingMessage();
+    this.loadingIndicatorAlternativa = false;
     //this.encuestadoraService.deleteEncuesta(row)
     //  .subscribe({
     //    next: () => {

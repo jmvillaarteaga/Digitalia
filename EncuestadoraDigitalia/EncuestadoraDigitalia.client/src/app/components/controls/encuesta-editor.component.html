@@ -56,7 +56,8 @@
           <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
         </div>
         <div class="modal-body">
-          <app-encuesta-modal-editor #EncuestaEditorModal ></app-encuesta-modal-editor>
+          <app-encuesta-modal-editor #EncuestaEditorModal (afterOnInit)="setEncuestaEditorModalComponent($event)"
+          (grabarPreguntaEvent)="grabarNuevaPregunta($event)"></app-encuesta-modal-editor>
         </div>
       </ng-template>
 

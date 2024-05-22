@@ -53,7 +53,7 @@ export class EncuestaEditorComponent implements OnInit {
   @ViewChild('editorModalTemplatePregunta', { static: true })
   editorModalTemplatePregunta!: TemplateRef<unknown>;
 
-  //encuestaEditor: RoleEditorComponent | null = null;
+  encuestaEditorModal: EncuestaEditorModalComponent | null = null;
 
   constructor(private alertService: AlertService, private translationService: AppTranslationService,
     private encuestadoraService: EncuestadoraService, private modalService: NgbModal) {
@@ -71,14 +71,14 @@ export class EncuestaEditorComponent implements OnInit {
    // this.loadData();
   }
 
-  //setRoleEditorComponent(roleEditor: RoleEditorComponent) {
-    //this.roleEditor = roleEditor;
+  setEncuestaEditorModalComponent(encuestaEditorModal: EncuestaEditorModalComponent) {
+    this.encuestaEditorModal = encuestaEditorModal;
 
     //if (this.sourceRole == null)
     //  this.editedRole = this.roleEditor.newRole(this.allPermissions);
     //else
     //  this.editedRole = this.roleEditor.editRole(this.sourceRole, this.allPermissions);
-  //}
+  }
 
   //addNewRoleToList() {
     //if (this.sourceRole) {
@@ -161,11 +161,26 @@ export class EncuestaEditorComponent implements OnInit {
   cancelar() {
     this.cancelarEvent.emit('Cancelar...');
   }
+
   editaPregunta(row: Pregunta) {
     //this.editingEncuestaDescripcion = { descripcion: row.descripcion };
     //this.sourceEncuesta = row;
 
     //this.openRoleEditor();
+  }
+  grabarNuevaPregunta(pregunta: Pregunta) {
+    let maxIndex = 0;
+    for (const r of this.rowsPreguntas) {
+      if ((r as PreguntaIndex).index > maxIndex) {
+        maxIndex = (r as PreguntaIndex).index;
+      }
+    }
+    (pregunta as PreguntaIndex).index = maxIndex + 1;
+    (pregunta as PreguntaIndex).cantidadAlternativas = pregunta.alternativas.length;
+
+    this.rowsCachePreguntas.splice(0, 0, pregunta as PreguntaIndex);
+    this.rowsPreguntas.splice(0, 0, pregunta as PreguntaIndex);
+    this.rowsPreguntas = [...this.rowsPreguntas];
   }
 
   openPreguntaEditor() {
@@ -174,21 +189,21 @@ export class EncuestaEditorComponent implements OnInit {
       backdrop: 'static'
     });
 
-    //modalRef.shown.subscribe(() => {
-      //if (!this.roleEditor)
-      //  throw new Error('The role editor component was not set.');
+    modalRef.shown.subscribe(() => {
+      if (!this.encuestaEditorModal)
+        throw new Error('The role editor component was not set.');
 
-    //  this.roleEditor.changesSavedCallback = () => {
-    //    this.addNewRoleToList();
-    //    modalRef.close();
-    //  };
+      this.encuestaEditorModal.changesSavedCallback = () => {
+        /*this.addNewRoleToList();*/
+        modalRef.close();
+      };
 
-    //  this.roleEditor.changesCancelledCallback = () => {
-    //    this.editedRole = null;
-    //    this.sourceRole = null;
-    //    modalRef.close();
-    //  };
-    //});
+      this.encuestaEditorModal.changesCancelledCallback = () => {
+        //this.editedRole = null;
+        //this.sourceRole = null;
+        modalRef.close();
+      };
+    });
 
     //modalRef.hidden.subscribe(() => {
     //  if (!this.roleEditor)
@@ -209,6 +224,11 @@ export class EncuestaEditorComponent implements OnInit {
     this.alertService.startLoadingMessage(`Eliminando... "${row.descripcion}"`);
     this.loadingIndicatorPregunta = true;
 
+    this.rowsCachePreguntas = this.rowsCachePreguntas.filter(item => item !== row);
+    this.rowsPreguntas = this.rowsPreguntas.filter(item => item !== row);
+
+    this.alertService.stopLoadingMessage();
+    this.loadingIndicatorPregunta = false;
     //this.encuestadoraService.deleteEncuesta(row)
     //  .subscribe({
     //    next: () => {
