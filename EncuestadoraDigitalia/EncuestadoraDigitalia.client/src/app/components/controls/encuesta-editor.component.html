@@ -46,18 +46,17 @@
 
 
       <ng-template #actionsTemplatePregunta let-row="row" let-value="value" let-i="index">
-        <a class="btn btn-link text-link btn-sm" href="javascript:;" (click)="editaPregunta(row)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'roles.management.Edit' | translate}}</a>
+        <!--<a class="btn btn-link text-link btn-sm" href="javascript:;" (click)="editaPregunta(row)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'roles.management.Edit' | translate}}</a>-->
         <a class="btn btn-link text-link btn-sm" href="javascript:;" (click)="eliminarPregunta(row)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{'roles.management.Delete' | translate}}</a>
       </ng-template>
 
-      <ng-template #editorModalPregunta let-modal>
+      <ng-template #editorModalTemplatePregunta let-modal>
         <div class="modal-header">
-          <h4 class="modal-title"><i class="fa fa-shield"></i> {{'roles.management.RoleDetails' | translate:newencuestaDescripcion}}</h4>
-          <h4 class="modal-title"><i class="fa fa-shield"></i> {{newencuestaDescripcion ? ('roles.management.EditRole' | translate:newencuestaDescripcion) : ('roles.management.NewRole' | translate)}}</h4>
+          <h4 class="modal-title"><i class="fa fa-pencil"></i> Creación de Pregunta y Alternativas</h4>
           <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
         </div>
         <div class="modal-body">
-          <!--<app-role-editor #roleEditor (afterOnInit)="setRoleEditorComponent($event)"></app-role-editor>-->
+          <app-encuesta-modal-editor #EncuestaEditorModal ></app-encuesta-modal-editor>
         </div>
       </ng-template>
 

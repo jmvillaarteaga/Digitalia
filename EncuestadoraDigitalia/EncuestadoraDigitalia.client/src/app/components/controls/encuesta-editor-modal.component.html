@@ -1,0 +1,66 @@
+  <div>  
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <label class="col-form-label col-lg-3" for="newPreguntaDescripcion">Pregunta: </label>
+          <div class="col-lg-9">
+            <input type="text" id="newPreguntaDescripcion" name="newPreguntaDescripcion" placeholder="Ingrese una pregunta" class="form-control"
+                   [(ngModel)]="newPregunta.descripcion" required minlength="2" maxlength="500" />
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="col-md-8">
+        <div class="row">
+          <label class="col-form-label col-lg-3" for="newAlternativaDescripcion">Alternativa: </label>
+          <div class="col-lg-9">
+            <input type="text" id="newAlternativaDescripcion" name="newAlternativaDescripcion" placeholder="Ingrese una alternativa" class="form-control"
+                    [(ngModel)]="newAlternativa.descripcion" required minlength="2" maxlength="500" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 pe-lg-5">
+        <ul class="nav flex-column flex-lg-row justify-content-end">
+          <li class="nav-item toolbaritem">
+            <a class="nav-link" href="javascript:;" (click)="nuevaAlternativa()">
+              <i class="fa fa-plus-circle"></i> Agregar
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+        <ngx-datatable class="material colored-header sm table-x table-striped table-hover"
+                       [loadingIndicator]="loadingIndicatorAlternativa"
+                       [rows]="rowsAlternativas"
+                       [rowHeight]="35"
+                       [headerHeight]="37"
+                       [footerHeight]="35"
+                       [columns]="columnsAlternativas"
+                       [scrollbarV]="true"
+                       [columnMode]="'force'">
+        </ngx-datatable>
+
+        <ng-template #indexTemplateAlternativa let-value="value">
+          <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #actionsTemplateAlternativa let-row="row" let-value="value" let-i="index">
+          <a class="btn btn-link text-link btn-sm" href="javascript:;" (click)="eliminarAlternativa(row)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{'roles.management.Delete' | translate}}</a>
+        </ng-template>
+
+        <div class="row">
+          <div class="col-12">
+            <div ngPreserveWhitespaces class="float-end">
+              <button type="button" (click)="cancelarPregunta()" class="btn btn-outline-secondary">Cancelar</button>
+              <button type="button" class="btn btn-primary" [disabled]="isSavingPregunta">
+                <i *ngIf="!isSavingPregunta" class='fa fa-save'></i><i *ngIf="isSavingPregunta" class='fa fa-circle-o-notch fa-spin'></i> {{isSavingPregunta ? 'Grabano...': 'Grabar' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+

@@ -11,48 +11,48 @@ import { TableColumn } from '@swimlane/ngx-datatable';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { AppTranslationService } from '../../services/app-translation.service';
 //import { AccountService } from '../../services/account.service';
-import { Utilities } from '../../services/utilities';
+//import { Utilities } from '../../services/utilities';
 //import { Role } from '../../models/role.model';
-import { EncuestaEditorModalComponent } from './encuesta-editor-modal.component';
-import { Encuesta } from '../../models/encuesta.model';
+//import { RoleEditorComponent } from './role-editor.component';
+//import { Encuesta } from '../../models/encuesta.model';
 import { Pregunta } from '../../models/pregunta.model';
 import { EncuestadoraService } from '../../services/encuestadora.service';
+import { Alternativa } from '../../models/alternativa.model';
 //import { Alternativa } from '../../models/alternativa.model';
 
-interface PreguntaIndex extends Pregunta {
+interface AlternativaIndex extends Alternativa {
   index: number;
-  cantidadAlternativas: number;
 }
 
 @Component({
-  selector: 'app-encuesta-editor',
-  templateUrl: './encuesta-editor.component.html',
-  styleUrl: './encuesta-editor.component.scss'
+  selector: 'app-encuesta-modal-editor',
+  templateUrl: './encuesta-editor-modal.component.html',
+  styleUrl: './encuesta-editor-modal.component.scss'
 })
 
-export class EncuestaEditorComponent implements OnInit {
-  columnsPreguntas: TableColumn[] = [];
-  rowsPreguntas: PreguntaIndex[] = [];
-  rowsCachePreguntas: PreguntaIndex[] = [];
+export class EncuestaEditorModalComponent implements OnInit {
+  columnsAlternativas: TableColumn[] = [];
+  rowsAlternativas: AlternativaIndex[] = [];
+  rowsCacheAlternativas: AlternativaIndex[] = [];
   //allAlternativas: Alternativa[] = [];
   //editedEncuesta: Encuesta | null = null;
   //sourceEncuesta: Encuesta | null = null;
-  newencuestaDescripcion: { descripcion: string } | null = null;
-  loadingIndicatorPregunta = false;
-  isSaving = false;
+  newPreguntaDescripcion: { descripcion: string } | null = null;
+  newAlternativaDescripcion: { descripcion: string } | null = null;
+  loadingIndicatorAlternativa = false;
+  isSavingPregunta = false;
 
-  newEncuesta: Encuesta = new Encuesta();
-  @Output() cancelarEvent = new EventEmitter<string>();
+  newPregunta: Pregunta = new Pregunta();
+  newAlternativa: Alternativa = new Alternativa();
+  @Output() cancelarPreguntaEvent = new EventEmitter<string>();
 
-  @ViewChild('indexTemplatePregunta', { static: true })
-  indexTemplatePregunta!: TemplateRef<unknown>;
+  @Output() grabarPreguntaEvent = new EventEmitter<Pregunta>();
 
-  @ViewChild('actionsTemplatePregunta', { static: true })
-  actionsTemplatePregunta!: TemplateRef<unknown>;
+  @ViewChild('indexTemplateAlternativa', { static: true })
+  indexTemplateAlternativa!: TemplateRef<unknown>;
 
-  @ViewChild('editorModalTemplatePregunta', { static: true })
-  editorModalTemplatePregunta!: TemplateRef<unknown>;
-
+  @ViewChild('actionsTemplateAlternativa', { static: true })
+  actionsTemplateAlternativa!: TemplateRef<unknown>;
   //encuestaEditor: RoleEditorComponent | null = null;
 
   constructor(private alertService: AlertService, private translationService: AppTranslationService,
@@ -61,11 +61,10 @@ export class EncuestaEditorComponent implements OnInit {
 
   ngOnInit() {
     //const gT = (key: string) => this.translationService.getTranslation(key);
-    this.columnsPreguntas = [
-      { prop: 'index', name: '#', width: 50, cellTemplate: this.indexTemplatePregunta, canAutoResize: false },
-      { prop: 'descripcion', name: 'Pregunta', width: 320 },
-      { prop: 'cantidadAlternativas', name: 'Cantidad de Alternativas', width: 320 },
-      { name: '', width: 160, cellTemplate: this.actionsTemplatePregunta, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
+    this.columnsAlternativas = [
+      { prop: 'index', name: '#', width: 50, cellTemplate: this.indexTemplateAlternativa, canAutoResize: false },
+      { prop: 'descripcion', name: 'Alternativa', width: 320 },
+      { name: 'Acción', width: 160, cellTemplate: this.actionsTemplateAlternativa, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
     ];
 
    // this.loadData();
@@ -147,67 +146,91 @@ export class EncuestaEditorComponent implements OnInit {
   //    });
   //}
 
-  onSearchChanged(value: string) {
-    this.rowsPreguntas = this.rowsCachePreguntas.filter(r => Utilities.searchArray(value, false, r.descripcion));
-  }
 
-  nuevaPregunta() {
+  nuevaAlternativa() {
+    let maxIndex = 0;
+      for (const r of this.rowsAlternativas) {
+        if ((r as AlternativaIndex).index > maxIndex) {
+          maxIndex = (r as AlternativaIndex).index;
+        }
+    }
+
+    const alternativaCache = new Alternativa();
+    alternativaCache.descripcion = this.newAlternativa.descripcion;
+    (alternativaCache as AlternativaIndex).index = maxIndex + 1;
+
+    this.rowsCacheAlternativas.splice(0, 0, alternativaCache as AlternativaIndex);
+    this.rowsAlternativas.splice(0, 0, alternativaCache as AlternativaIndex);
+    this.rowsAlternativas = [...this.rowsAlternativas];
+    this.newAlternativa.descripcion = '';
+
     //this.editingEncuestaDescripcion = null;
     //this.sourceEncuesta = null;
     //this.editedEncuesta = new Encuesta();
 
-    this.openPreguntaEditor();
+    //this.openRoleEditor();
   }
-  cancelar() {
-    this.cancelarEvent.emit('Cancelar...');
+  cancelarPregunta() {
+    this.cancelarPreguntaEvent.emit('Cancelar...');
   }
-  editaPregunta(row: Pregunta) {
+
+  grabarPregunta() {
+    this.newPregunta.alternativas = this.rowsAlternativas;
+    this.grabarPreguntaEvent.emit(this.newPregunta);
+  }
+  //editaPregunta(row: Alternativa) {
     //this.editingEncuestaDescripcion = { descripcion: row.descripcion };
     //this.sourceEncuesta = row;
 
     //this.openRoleEditor();
+  //}
+
+  //openRoleEditor() {
+  //  const modalRef = this.modalService.open(this.editorModalTemplate, {
+  //    size: 'lg',
+  //    backdrop: 'static'
+  //  });
+
+  //  modalRef.shown.subscribe(() => {
+  //    if (!this.roleEditor)
+  //      throw new Error('The role editor component was not set.');
+
+  //    this.roleEditor.changesSavedCallback = () => {
+  //      this.addNewRoleToList();
+  //      modalRef.close();
+  //    };
+
+  //    this.roleEditor.changesCancelledCallback = () => {
+  //      this.editedRole = null;
+  //      this.sourceRole = null;
+  //      modalRef.close();
+  //    };
+  //  });
+
+  //  modalRef.hidden.subscribe(() => {
+  //    if (!this.roleEditor)
+  //      throw new Error('The role editor component was not set.');
+
+  //    this.editingRoleName = null;
+  //    this.roleEditor.resetForm(true);
+  //    this.roleEditor = null;
+  //  });
+  //}
+
+  eliminarAlternativa(row: Alternativa) {
+    this.alertService.showDialog(`Esta seguro que desea eliminar la alternativa : "${row.descripcion}" ?`,
+      DialogType.confirm, () => this.eliminarAlternativaHelper(row));
   }
 
-  openPreguntaEditor() {
-    const modalRef = this.modalService.open(this.editorModalTemplatePregunta, {
-      size: 'lg',
-      backdrop: 'static'
-    });
-
-    //modalRef.shown.subscribe(() => {
-      //if (!this.roleEditor)
-      //  throw new Error('The role editor component was not set.');
-
-    //  this.roleEditor.changesSavedCallback = () => {
-    //    this.addNewRoleToList();
-    //    modalRef.close();
-    //  };
-
-    //  this.roleEditor.changesCancelledCallback = () => {
-    //    this.editedRole = null;
-    //    this.sourceRole = null;
-    //    modalRef.close();
-    //  };
-    //});
-
-    //modalRef.hidden.subscribe(() => {
-    //  if (!this.roleEditor)
-    //    throw new Error('The role editor component was not set.');
-
-    //  this.editingRoleName = null;
-    //  this.roleEditor.resetForm(true);
-    //  this.roleEditor = null;
-    //});
-  }
-
-  eliminarPregunta(row: Pregunta) {
-    this.alertService.showDialog(`Esta seguro que desea eliminar la pregunta : "${row.descripcion}" ?`,
-      DialogType.confirm, () => this.eliminarPreguntaHelper(row));
-  }
-
-  eliminarPreguntaHelper(row: Pregunta) {
+  eliminarAlternativaHelper(row: Alternativa) {
     this.alertService.startLoadingMessage(`Eliminando... "${row.descripcion}"`);
-    this.loadingIndicatorPregunta = true;
+    this.loadingIndicatorAlternativa = true;
+
+    this.alertService.stopLoadingMessage();
+    this.loadingIndicatorAlternativa = false;
+
+    this.rowsCacheAlternativas = this.rowsCacheAlternativas.filter(item => item !== row);
+    this.rowsAlternativas = this.rowsAlternativas.filter(item => item !== row);
 
     //this.encuestadoraService.deleteEncuesta(row)
     //  .subscribe({
