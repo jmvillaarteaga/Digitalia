@@ -5,7 +5,7 @@
 // ---------------------------------------
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ToastaService, ToastaConfig, ToastOptions, ToastData } from 'ngx-toasta';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -42,6 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   loginControl: LoginComponent | undefined;
 
+  mySubscription;
+
   gT = (key: string | Array<string>, interpolateParams?: object) =>
     this.translationService.getTranslation(key, interpolateParams);
 
@@ -75,6 +77,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.toastaConfig.showDuration = false;
 
     AppTitleService.appName = this.appTitle;
+
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.mySubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Trick the Router into believing it's last link wasn't previously loaded
+        this.router.navigated = false;
+      }
+    });
   }
 
   ngOnInit() {
@@ -115,6 +125,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unsubscribeNotifications();
+    if (this.mySubscription) {
+      this.mySubscription.unsubscribe();
+    }
   }
 
   private unsubscribeNotifications() {

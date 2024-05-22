@@ -6,6 +6,7 @@
 
 using AutoMapper;
 using EncuestadoraDigitalia.Core.Models.Account;
+using EncuestadoraDigitalia.Core.Models.Encuestadora;
 using EncuestadoraDigitalia.Core.Services.Account;
 using EncuestadoraDigitalia.Core.Services.Encuestadora.Interfaces;
 using EncuestadoraDigitalia.Server.Authorization;
@@ -48,6 +49,30 @@ namespace EncuestadoraDigitalia.Server.Controllers
 
             return Ok(_mapper.Map<List<EncuestaVM>>(encuestas));
         }
+
+        [HttpPost("encuestas")]
+        [Authorize(AuthPolicies.ManageAllRolesPolicy)]
+        [ProducesResponseType(201, Type = typeof(EncuestaVM))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> CreateRole([FromBody] EncuestaVM encuesta)
+        {
+            if (encuesta == null)
+                return BadRequest($"{nameof(encuesta)} cannot be null");
+
+            var nuevaEncuesta = _mapper.Map<Encuesta>(encuesta);
+
+            var result = await _encuestaService
+                .CreateEncuestaAsync(nuevaEncuesta);
+
+            if (result.Succeeded)
+            {               
+                return CreatedAtAction(nameof(GetEncuestas), new { id = encuesta?.Id }, encuesta);
+            }
+
+            AddModelError(result.Errors);
+            return BadRequest(ModelState);
+        }
+
 
         [HttpDelete("encuestas/{id}")]
         [Authorize(AuthPolicies.ManageAllRolesPolicy)]

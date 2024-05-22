@@ -57,6 +57,13 @@ export class EncuestadoraEndpoint extends EndpointBase {
       }));
   }
 
+  getNewEncuestaEndpoint<T>(encuesta: object): Observable<T> {
+    return this.http.post<T>(this.encuestasUrl, JSON.stringify(encuesta), this.requestHeaders).pipe(
+      catchError(error => {
+        return this.handleError(error, () => this.getNewEncuestaEndpoint<T>(encuesta));
+      }));
+  }
+
   //getNewUserEndpoint<T>(user: object): Observable<T> {
   //  return this.http.post<T>(this.usersUrl, JSON.stringify(user), this.requestHeaders).pipe(
   //    catchError(error => {

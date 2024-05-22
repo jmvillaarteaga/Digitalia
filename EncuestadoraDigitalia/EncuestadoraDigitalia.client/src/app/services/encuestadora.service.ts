@@ -129,10 +129,11 @@ export class EncuestadoraService {
   //  }
   //}
 
-  //newRole(role: Role) {
-  //  return this.accountEndpoint.getNewRoleEndpoint<Role>(role).pipe<Role>(
-  //    tap(() => this.onRolesChanged([role], AccountService.roleAddedOperation)));
-  //}
+  grabarEncuesta(encuesta: Encuesta) {
+    return this.encuestadoraEndpoint.getNewEncuestaEndpoint<Encuesta>(encuesta);
+      //.pipe<Encuesta>(
+      //tap(() => this.onRolesChanged([role], AccountService.roleAddedOperation));
+  }
 
   deleteEncuesta(EncuestaOEncuestaId: number | Encuesta): Observable<Encuesta> {
     if (typeof EncuestaOEncuestaId === 'number') {

@@ -60,5 +60,11 @@ namespace EncuestadoraDigitalia.Core.Services.Encuestadora
             return (true, []);
         }
 
+        public async Task<(bool Succeeded, string[] Errors)> CreateEncuestaAsync(Encuesta encuesta)
+        {
+            var entity = _context.Encuestas.AddAsync(encuesta);
+                await _context.SaveChangesAsync();            
+            return (true, []);
+        }
     }   
 }

@@ -11,7 +11,7 @@ namespace EncuestadoraDigitalia.Core.Services.Encuestadora.Interfaces
     public interface IEncuestaService
     {
         //Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
-        //Task<(bool Succeeded, string[] Errors)> CreateUserAsync(ApplicationUser user, IEnumerable<string> roles, string password);
+        Task<(bool Succeeded, string[] Errors)> CreateEncuestaAsync(Encuesta encuesta);
         Task<(bool Succeeded, string[] Errors)> DeleteEncuestaAsync(Encuesta encuesta);
         //Task<(bool Succeeded, string[] Errors)> DeleteEncuestaAsync(int encuestaId);
         //Task<(ApplicationUser User, string[] Roles)?> GetUserAndRolesAsync(string userId);

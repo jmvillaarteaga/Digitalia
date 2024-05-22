@@ -7,6 +7,7 @@
 import { Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableColumn } from '@swimlane/ngx-datatable';
+import { Router } from '@angular/router';
 
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { AppTranslationService } from '../../services/app-translation.service';
@@ -17,6 +18,7 @@ import { EncuestaEditorModalComponent } from './encuesta-editor-modal.component'
 import { Encuesta } from '../../models/encuesta.model';
 import { Pregunta } from '../../models/pregunta.model';
 import { EncuestadoraService } from '../../services/encuestadora.service';
+import { HttpErrorResponse } from '@angular/common/http';
 //import { Alternativa } from '../../models/alternativa.model';
 
 interface PreguntaIndex extends Pregunta {
@@ -56,7 +58,7 @@ export class EncuestaEditorComponent implements OnInit {
   encuestaEditorModal: EncuestaEditorModalComponent | null = null;
 
   constructor(private alertService: AlertService, private translationService: AppTranslationService,
-    private encuestadoraService: EncuestadoraService, private modalService: NgbModal) {
+    private encuestadoraService: EncuestadoraService, private modalService: NgbModal, private router: Router) {
   }
 
   ngOnInit() {
@@ -183,6 +185,37 @@ export class EncuestaEditorComponent implements OnInit {
     this.rowsPreguntas = [...this.rowsPreguntas];
   }
 
+  grabarEncuesta() {
+    this.isSaving = true;
+    this.alertService.startLoadingMessage('Saving changes...');
+
+    this.newEncuesta.preguntas = this.rowsPreguntas;
+    this.encuestadoraService.grabarEncuesta(this.newEncuesta)
+      .subscribe({
+        next: encuesta => this.saveSuccessHelper(encuesta),
+        error: error => this.saveFailedHelper(error)
+      });
+  }
+
+  private saveSuccessHelper(encuesta: Encuesta) {
+    this.isSaving = false;
+    this.alertService.stopLoadingMessage();
+    //this.showValidationErrors = false;
+
+    if (encuesta) {
+      this.alertService.showMessage('Success', `Encuesta "${this.newEncuesta.descripcion}" was created successfully`, MessageSeverity.success);
+      this.router.navigate([this.router.url]);
+    } else {
+      this.alertService.showMessage('Success', `Changes to encuesta "${this.newEncuesta.descripcion}" was saved successfully`, MessageSeverity.success);
+    }
+  }
+
+  private saveFailedHelper(error: HttpErrorResponse) {
+    this.isSaving = false;
+    this.alertService.stopLoadingMessage();
+    this.alertService.showStickyMessage('Save Error', 'The below errors occurred whilst saving your changes:', MessageSeverity.error, error);
+    this.alertService.showStickyMessage(error, null, MessageSeverity.error);   
+  }
   openPreguntaEditor() {
     const modalRef = this.modalService.open(this.editorModalTemplatePregunta, {
       size: 'lg',

@@ -65,7 +65,7 @@
         <div class="col-12">
           <div ngPreserveWhitespaces class="float-end">
             <button type="button" (click)="cancelar()" class="btn btn-outline-secondary">Cancelar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+            <button type="button" (click)="grabarEncuesta()" class="btn btn-primary" [disabled]="isSaving">
               <i *ngIf="!isSaving" class='fa fa-save'></i><i *ngIf="isSaving" class='fa fa-circle-o-notch fa-spin'></i> {{isSaving ? 'Grabano...': 'Grabar' }}
             </button>
           </div>
