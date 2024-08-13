@@ -93,8 +93,8 @@ export class EncuestasManagementComponent implements OnInit {
     this.columns = [
       { prop: 'index', name: '#', width: 50, cellTemplate: this.indexTemplate, canAutoResize: false },
       { prop: 'descripcion', name: 'Descripción', width: 320 },
-      { prop: 'cantidadPreguntas', name: 'Cantidad de Preguntas', width: 320 },
-      { name: 'Opciones', width: 160, cellTemplate: this.actionsTemplate, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
+      { prop: 'cantidadPreguntas', name: 'Cantidad de Preguntas', width: 160 },
+      { name: 'Opciones', width: 320, cellTemplate: this.actionsTemplate, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
     ];
 
     this.loadData();
