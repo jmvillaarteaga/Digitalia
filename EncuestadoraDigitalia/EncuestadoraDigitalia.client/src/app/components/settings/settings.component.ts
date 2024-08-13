@@ -87,6 +87,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   get canViewUsers() {
     return this.accountService.userHasPermission(Permissions.viewUsers);
   }
+  get canManageUsers() {
+    return this.accountService.userHasPermission(Permissions.manageUsers);
+  }
 
   get canViewRoles() {
     return this.accountService.userHasPermission(Permissions.viewRoles);

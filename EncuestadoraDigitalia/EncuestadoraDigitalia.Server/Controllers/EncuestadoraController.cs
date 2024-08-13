@@ -33,7 +33,7 @@ namespace EncuestadoraDigitalia.Server.Controllers
         }
 
         [HttpGet("encuestas")]
-        [Authorize(AuthPolicies.ViewAllRolesPolicy)]
+        [Authorize(AuthPolicies.ViewAllUsersPolicy)]
         [ProducesResponseType(200, Type = typeof(List<EncuestaVM>))]
         public async Task<IActionResult> GetEncuestas()
         {

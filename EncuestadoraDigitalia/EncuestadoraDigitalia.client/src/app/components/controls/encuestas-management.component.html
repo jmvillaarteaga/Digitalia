@@ -37,6 +37,8 @@
       <!--<a *ngIf="canManageEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="editaEncuesta(row)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'roles.management.Edit' | translate}}</a>
       <a *ngIf="!canManageEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="editaEncuesta(row)"><i class="fa fa-eye" aria-hidden="true"></i> {{'roles.management.Details' | translate}}</a>
       {{canManageEncuestas ? '|' : ''}}-->
+      <a *ngIf="canViewEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="iniciarEncuesta(row)"><i class="fa fa-pencil" aria-hidden="true"></i> Iniciar</a>
+
       <a *ngIf="canManageEncuestas" class="btn btn-link text-link btn-sm" href="javascript:;" (click)="eliminarEncuesta(row)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{'roles.management.Delete' | translate}}</a>
     </ng-template>
 
@@ -55,5 +57,16 @@
   <div [hidden]="!nuevoEnc">
     <app-encuesta-editor (cancelarEvent)="cancelarNuevaEncuesta($event)"></app-encuesta-editor>
   </div>
+
+  <ng-template #iniciarModalTemplateEncuesta let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title"><i class="fa fa-pencil"></i></h4>
+      <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
+    </div>
+    <div class="modal-body">
+      <app-encuesta-modal-iniciar #EncuestaIniciarModal (afterOnInit)="setEncuestaIniciarModalComponent($event)"
+                                 (grabarEncuestaRealizadaEvent)="grabarEncuestaRealizada($event)"></app-encuesta-modal-iniciar>
+    </div>
+  </ng-template>
 
 </div>

@@ -15,6 +15,7 @@ import { Utilities } from '../../services/utilities';
 //import { Role } from '../../models/role.model';
 import { Permissions } from '../../models/permission.model';
 import { EncuestaEditorComponent } from './encuesta-editor.component';
+import { EncuestaIniciarModalComponent } from './encuesta-iniciar-modal.component';
 import { Encuesta } from '../../models/encuesta.model';
 import { Pregunta } from '../../models/pregunta.model';
 import { EncuestadoraService } from '../../services/encuestadora.service';
@@ -36,12 +37,12 @@ export class EncuestasManagementComponent implements OnInit {
   rowsCache: Encuesta[] = [];
   allPreguntas: Pregunta[] = [];
   editedEncuesta: Encuesta | null = null;
+  encuestaIniciada: Encuesta | null = null;
   sourceEncuesta: Encuesta | null = null;
   editingEncuestaDescripcion: { descripcion: string } | null = null;
   loadingIndicator = false;
   nuevoEnc = false;
   encuestaDescripcion = '';
-
   //newEncuesta: Encuesta = new Encuesta();
 
   @ViewChild('indexTemplate', { static: true })
@@ -50,13 +51,40 @@ export class EncuestasManagementComponent implements OnInit {
   @ViewChild('actionsTemplate', { static: true })
   actionsTemplate!: TemplateRef<unknown>;
 
+  @ViewChild('iniciarModalTemplateEncuesta', { static: true })
+  iniciarModalTemplateEncuesta!: TemplateRef<unknown>;
+
   //@ViewChild('editorModal', { static: true })
   //editorModalTemplate!: TemplateRef<unknown>;
 
-  //encuestaEditor: RoleEditorComponent | null = null;
+  encuestaIniciarModal: EncuestaIniciarModalComponent | null = null;
 
   constructor(private alertService: AlertService, private translationService: AppTranslationService,
     private encuestadoraService: EncuestadoraService, private modalService: NgbModal) {
+  }
+
+  setEncuestaIniciarModalComponent(encuestaIniciarModal: EncuestaIniciarModalComponent) {
+    this.encuestaIniciarModal = encuestaIniciarModal;
+
+    //if (this.sourceRole == null)
+    //  this.editedRole = this.roleEditor.newRole(this.allPermissions);
+    //else
+    //  this.editedRole = this.roleEditor.editRole(this.sourceRole, this.allPermissions);
+  }
+
+  grabarEncuestaRealizada(pregunta: Pregunta) {
+    //let maxIndex = 0;
+    //for (const r of this.rowsPreguntas) {
+    //  if ((r as PreguntaIndex).index > maxIndex) {
+    //    maxIndex = (r as PreguntaIndex).index;
+    //  }
+    //}
+    //(pregunta as PreguntaIndex).index = maxIndex + 1;
+    //(pregunta as PreguntaIndex).cantidadAlternativas = pregunta.alternativas.length;
+
+    //this.rowsCachePreguntas.splice(0, 0, pregunta as PreguntaIndex);
+    //this.rowsPreguntas.splice(0, 0, pregunta as PreguntaIndex);
+    //this.rowsPreguntas = [...this.rowsPreguntas];
   }
 
   ngOnInit() {
@@ -66,7 +94,7 @@ export class EncuestasManagementComponent implements OnInit {
       { prop: 'index', name: '#', width: 50, cellTemplate: this.indexTemplate, canAutoResize: false },
       { prop: 'descripcion', name: 'Descripción', width: 320 },
       { prop: 'cantidadPreguntas', name: 'Cantidad de Preguntas', width: 320 },
-      { name: '', width: 160, cellTemplate: this.actionsTemplate, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
+      { name: 'Opciones', width: 160, cellTemplate: this.actionsTemplate, resizeable: false, canAutoResize: false, sortable: false, draggable: false }
     ];
 
     this.loadData();
@@ -165,12 +193,53 @@ export class EncuestasManagementComponent implements OnInit {
     this.nuevoEnc = false;
   }
 
+  iniciarEncuesta(row: Encuesta) {
+    //this.editingEncuestaDescripcion = null;
+    //this.sourceEncuesta = null;
+    this.encuestaIniciada = row;
+
+    this.openIniciarEncuesta();
+  }
+
   editaEncuesta(row: Encuesta) {
     this.editingEncuestaDescripcion = { descripcion: row.descripcion };
     this.sourceEncuesta = row;
 
     //this.openRoleEditor();
   }
+
+  openIniciarEncuesta() {
+    const modalRef = this.modalService.open(this.iniciarModalTemplateEncuesta, {
+      size: 'lg',
+      backdrop: 'static'
+    });
+
+    modalRef.shown.subscribe(() => {
+      if (!this.encuestaIniciarModal)
+        throw new Error('The role editor component was not set.');
+
+      this.encuestaIniciarModal.changesSavedCallback = () => {
+        /*this.addNewRoleToList();*/
+        modalRef.close();
+      };
+
+      this.encuestaIniciarModal.changesCancelledCallback = () => {
+        //this.editedRole = null;
+        //this.sourceRole = null;
+        modalRef.close();
+      };
+    });
+
+    //modalRef.hidden.subscribe(() => {
+    //  if (!this.roleEditor)
+    //    throw new Error('The role editor component was not set.');
+
+    //  this.editingRoleName = null;
+    //  this.roleEditor.resetForm(true);
+    //  this.roleEditor = null;
+    //});
+  }
+
 
   //openRoleEditor() {
   //  const modalRef = this.modalService.open(this.editorModalTemplate, {
@@ -209,6 +278,7 @@ export class EncuestasManagementComponent implements OnInit {
       DialogType.confirm, () => this.eliminarEncuestaHelper(row));
   }
 
+
   eliminarEncuestaHelper(row: Encuesta) {
     this.alertService.startLoadingMessage(`Eliminando... "${row.descripcion}"`);
     this.loadingIndicator = true;
@@ -235,5 +305,8 @@ export class EncuestasManagementComponent implements OnInit {
 
   get canManageEncuestas() {
     return this.encuestadoraService.userHasPermission(Permissions.manageEncuestas);
+  }
+  get canViewEncuestas() {
+    return this.encuestadoraService.userHasPermission(Permissions.viewEncuestas);
   }
 }

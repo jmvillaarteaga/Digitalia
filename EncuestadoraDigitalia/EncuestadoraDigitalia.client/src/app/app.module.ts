@@ -63,6 +63,7 @@ import { EncuestadoraEndpoint } from './services/encuestadora-endpoint.service';
 import { EncuestadoraService } from './services/encuestadora.service';
 import { EncuestaEditorComponent } from './components/controls/encuesta-editor.component';
 import { EncuestaEditorModalComponent } from './components/controls/encuesta-editor-modal.component';
+import { EncuestaIniciarModalComponent } from './components/controls/encuesta-iniciar-modal.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { EncuestaEditorModalComponent } from './components/controls/encuesta-edi
     EncuestasManagementComponent,
     EncuestaEditorComponent,
     EncuestaEditorModalComponent,
+    EncuestaIniciarModalComponent,
     AboutComponent,
     NotFoundComponent,
     NotificationsViewerComponent,

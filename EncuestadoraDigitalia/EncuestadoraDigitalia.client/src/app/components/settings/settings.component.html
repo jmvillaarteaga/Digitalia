@@ -5,6 +5,7 @@
 <div [@fadeInOut]>
   <div class="d-sm-flex flex-row mb-2">
     <ul appBootstrapTab #tab="bootstrap-tab" (showBSTab)="onShowTab($event)" class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation">
+
       <li class="nav-item">
         <a id="profileTab" [routerLink]="[]" fragment="profile" data-bs-target="#profile" class="nav-link active" role="tab" aria-controls="profile">
           <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i> {{'settings.tab.Profile' | translate}}
@@ -15,7 +16,7 @@
           <i class="fa fa-sliders fa-fw" aria-hidden="true"></i> {{'settings.tab.Preferences' | translate}}
         </a>
       </li>
-      <li [hidden]="!canViewUsers" class="nav-item">
+      <li [hidden]="!canManageUsers" class="nav-item">
         <a id="usersTab" [routerLink]="[]" fragment="users" data-bs-target="#users" class="nav-link" role="tab" aria-controls="users">
           <i class="fa fa-users fa-fw" aria-hidden="true"></i> {{'settings.tab.Users' | translate}}
         </a>
@@ -27,6 +28,7 @@
       </li>
     </ul>
     <div class="tab-content w-100">
+
       <div class="tab-pane show active" id="profile" role="tabpanel">
         <h4>{{'settings.header.UserProfile' | translate}}</h4>
         <hr class="hr-separator" />
@@ -45,14 +47,14 @@
       <div class="tab-pane" id="users" role="tabpanel">
         <h4>{{'settings.header.UsersManagements' | translate}}</h4>
         <hr class="hr-separator" />
-        <div [@fadeInOut] *ngIf="canViewUsers && isUsersActivated" class="content-container ps-lg-1">
+        <div [@fadeInOut] *ngIf="canViewUsers" class="content-container ps-lg-1">
           <app-users-management></app-users-management>
         </div>
       </div>
       <div class="tab-pane" id="roles" role="tabpanel">
         <h4>{{'settings.header.RolesManagement' | translate}}</h4>
         <hr class="hr-separator" />
-        <div [@fadeInOut] *ngIf="canViewRoles && isRolesActivated" class="content-container ps-lg-1">
+        <div [@fadeInOut] *ngIf="canViewRoles" class="content-container ps-lg-1">
           <app-roles-management></app-roles-management>
         </div>
       </div>

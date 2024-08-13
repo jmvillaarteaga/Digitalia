@@ -25,5 +25,11 @@ namespace EncuestadoraDigitalia.Server.Authorization
 
         /// <summary>Policy to allow assigning roles the user has access to (Requires new and current roles as parameter).</summary>
         public const string AssignAllowedRolesPolicy = "Assign Allowed Roles";
+
+        ///<summary>Policy to allow viewing all user records.</summary>
+        public const string ViewAllEncuestasPolicy = "View All Users";
+
+        ///<summary>Policy to allow adding, removing and updating all user records.</summary>
+        public const string ManageAllEncuestasPolicy = "Manage All Users";
     }
 }
